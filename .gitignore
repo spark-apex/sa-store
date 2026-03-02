@@ -1,0 +1,10 @@
+# 通用忽略
+target/
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# 环境变量（不提交敏感数据）
+.env
+!.env.example
