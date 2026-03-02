@@ -1,8 +1,11 @@
 /// SA-Store 根组件
 /// AuthProvider + TitleBar + BottomNav（含"我的"）
 import { onMount, Switch, Match, createSignal } from 'solid-js'
-import { TitleBar, windowCtl } from '@sa/ui/desktop'
+import { TitleBar, windowCtl, createI18n } from '@sa/ui/desktop'
 import { AuthProvider, BottomNav, ProfilePage, LoginDialog } from '@sa/ui/user'
+
+/// i18n（暂无翻译文件，默认中文）
+const i18n = createI18n('sa-store')
 import Home from '@/pages/Home'
 import Browse from '@/pages/Browse'
 import Installed from '@/pages/Installed'
@@ -61,6 +64,11 @@ export default function App() {
                     productLogo={<StoreLogo />}
                     appKey="sa-store"
                     productUrl="https://github.com/spark-apex/sa-store"
+                    languages={i18n.LANGUAGES}
+                    currentLang={i18n.currentLang}
+                    currentLangCC={i18n.currentLangCC}
+                    onLangChange={i18n.setLang}
+                    isLangActive={i18n.isLangActive}
                 />
 
                 {/* 页面内容区 */}
