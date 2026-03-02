@@ -24,6 +24,7 @@ pub fn routes(state: Arc<AppState>) -> Router {
 
 /// 检查更新 — 返回 Tauri updater 兼容 JSON
 /// 客户端 tauri.conf.json 的 endpoints 指向此接口
+/// 支持多平台：同一版本号可以有多个平台的安装包
 async fn check_update(
     State(state): State<Arc<AppState>>,
     Path(app_key): Path<String>,
@@ -36,9 +37,9 @@ async fn check_update(
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
         .ok_or(StatusCode::NOT_FOUND)?;
 
-    // 查最新已审核版本
-    let version = sqlx::query_as::<_, AppVersion>(
-        "SELECT * FROM app_versions WHERE app_id = $1 AND status = 'approved' ORDER BY created_at DESC LIMIT 1"
+    // 查最新已审核版本号
+    let latest_version: String = sqlx::query_scalar(
+        "SELECT version FROM app_versions WHERE app_id = $1 AND status = 'approved' ORDER BY created_at DESC LIMIT 1"
     )
     .bind(app.id)
     .fetch_optional(&state.db)
@@ -46,17 +47,41 @@ async fn check_update(
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?
     .ok_or(StatusCode::NOT_FOUND)?;
 
-    // 构建 Tauri 标准响应
+    // 查该版本号下所有平台的记录
+    let all_platforms = sqlx::query_as::<_, AppVersion>(
+        "SELECT * FROM app_versions WHERE app_id = $1 AND version = $2 AND status = 'approved'"
+    )
+    .bind(app.id)
+    .bind(&latest_version)
+    .fetch_all(&state.db)
+    .await
+    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+
+    if all_platforms.is_empty() {
+        return Err(StatusCode::NOT_FOUND);
+    }
+
+    // 构建 Tauri 标准响应 — 汇总所有平台
     let mut platforms = HashMap::new();
-    platforms.insert(version.platform.clone(), TauriPlatformInfo {
-        url: version.download_url.clone(),
-        signature: version.signature.clone().unwrap_or_default(),
-    });
+    let mut notes = String::new();
+    let mut pub_date = String::new();
+
+    for ver in &all_platforms {
+        platforms.insert(ver.platform.clone(), TauriPlatformInfo {
+            url: ver.download_url.clone(),
+            signature: ver.signature.clone().unwrap_or_default(),
+        });
+        // 使用第一条记录的 changelog 和日期
+        if notes.is_empty() {
+            notes = ver.changelog.clone().unwrap_or_default();
+            pub_date = ver.created_at.to_rfc3339();
+        }
+    }
 
     Ok(Json(TauriUpdateResponse {
-        version: version.version,
-        notes: version.changelog.unwrap_or_default(),
-        pub_date: version.created_at.to_rfc3339(),
+        version: latest_version,
+        notes,
+        pub_date,
         platforms,
     }))
 }

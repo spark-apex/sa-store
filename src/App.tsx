@@ -11,16 +11,27 @@ import { currentPage } from '@/services/state'
 /// 星火极点品牌 Logo（应用商店用主品牌色）
 function StoreLogo() {
     return (
-        <svg width="16" height="16" viewBox="0 35 500 440" fill="none">
+        <svg width="16" height="16" viewBox="0 0 64 64" fill="none">
             <defs>
-                <linearGradient id="sl1" x1="0" y1="0" x2="0.6" y2="1">
-                    <stop offset="0%" stop-color="#1296DB" />
-                    <stop offset="100%" stop-color="#80D8FF" />
+                <linearGradient id="sl1" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#B8D4F0" />
+                    <stop offset="100%" stop-color="#D0E4F8" />
+                </linearGradient>
+                <linearGradient id="sl2" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#8BBDE8" />
+                    <stop offset="100%" stop-color="#B0D2F0" />
+                </linearGradient>
+                <linearGradient id="sl3" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#4A9DE0" />
+                    <stop offset="100%" stop-color="#6FB5E8" />
                 </linearGradient>
             </defs>
-            <path d="M 256 60 L 432 162 L 432 358 L 256 456 L 80 358 L 80 162 Z"
-                fill="none" stroke="url(#sl1)" stroke-width="28" stroke-linejoin="round" />
-            <circle cx="256" cy="258" r="10" fill="#1296DB" />
+            {/* 底层 — 最浅 */}
+            <path d="M8 38 L32 26 L56 38 L32 50 Z" fill="url(#sl1)" />
+            {/* 中层 */}
+            <path d="M8 30 L32 18 L56 30 L32 42 Z" fill="url(#sl2)" />
+            {/* 顶层 — 最深 */}
+            <path d="M8 22 L32 10 L56 22 L32 34 Z" fill="url(#sl3)" />
         </svg>
     )
 }

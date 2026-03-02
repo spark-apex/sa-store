@@ -45,4 +45,21 @@ pub struct AppSummary {
     pub is_official: bool,
     pub total_downloads: i64,
     pub latest_version: Option<String>,
+    pub supported_platforms: Vec<String>,
+}
+
+/// 支持的平台标准值
+pub const VALID_PLATFORMS: &[&str] = &[
+    "windows-x86_64",     // Windows 桌面
+    "darwin-x86_64",      // macOS Intel
+    "darwin-aarch64",     // macOS Apple Silicon
+    "linux-x86_64",       // Linux 桌面
+    "android-arm64",      // Android
+    "ios-arm64",          // iOS
+    "harmonyos-arm64",    // 鸿蒙
+];
+
+/// 校验平台值是否合法
+pub fn is_valid_platform(platform: &str) -> bool {
+    VALID_PLATFORMS.contains(&platform)
 }

@@ -53,7 +53,7 @@ async fn list_apps(
     .await
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    // 查最新版本号
+    // 查最新版本号 + 支持平台
     let mut summaries = Vec::new();
     for app in apps {
         let latest: Option<String> = sqlx::query_scalar(
@@ -64,11 +64,21 @@ async fn list_apps(
         .await
         .unwrap_or(None);
 
+        // 查询所有已审核版本的平台（去重）
+        let platforms: Vec<String> = sqlx::query_scalar(
+            "SELECT DISTINCT platform FROM app_versions WHERE app_id = $1 AND status = 'approved'"
+        )
+        .bind(app.id)
+        .fetch_all(&state.db)
+        .await
+        .unwrap_or_default();
+
         summaries.push(AppSummary {
             id: app.id, app_key: app.app_key, name: app.name,
             description: app.description, logo_url: app.logo_url,
             category: app.category, is_official: app.is_official,
             total_downloads: app.total_downloads, latest_version: latest,
+            supported_platforms: platforms,
         });
     }
     Ok(Json(summaries))
