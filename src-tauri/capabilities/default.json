@@ -1,0 +1,13 @@
+{
+    "identifier": "default",
+    "description": "SA-Store 默认权限",
+    "windows": [
+        "main"
+    ],
+    "permissions": [
+        "core:default",
+        "shell:allow-open",
+        "log:default",
+        "core:event:default"
+    ]
+}

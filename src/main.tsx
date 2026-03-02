@@ -1,0 +1,7 @@
+/// SA-Store 入口
+import { render } from 'solid-js/web'
+import 'virtual:uno.css'
+import './index.css'
+import App from './App'
+
+render(() => <App />, document.getElementById('root')!)

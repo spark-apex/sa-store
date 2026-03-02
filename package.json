@@ -1,0 +1,35 @@
+{
+    "name": "@sa/store",
+    "version": "1.0.0",
+    "description": "SA-Store · 星火极点应用商店",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "tauri": "tauri",
+        "tauri:dev": "tauri dev",
+        "tauri:build": "tauri build",
+        "clean": "cd src-tauri && cargo clean"
+    },
+    "dependencies": {
+        "@sa/ui": "file:../packages/sa-ui",
+        "@tauri-apps/api": "2.3.0",
+        "flag-icons": "7.5.0",
+        "solid-js": "1.10.0-beta.0"
+    },
+    "devDependencies": {
+        "@iconify-json/carbon": "1.2.18",
+        "@tauri-apps/cli": "2.3.0",
+        "@unocss/preset-attributify": "66.6.0-beta.1",
+        "@unocss/preset-icons": "66.6.0-beta.1",
+        "@unocss/preset-uno": "66.6.0-beta.1",
+        "@unocss/transformer-directives": "66.6.0-beta.1",
+        "esbuild": "0.27.3",
+        "typescript": "6.0.0-beta",
+        "unocss": "66.6.0-beta.1",
+        "vite": "8.0.0-beta.16",
+        "vite-plugin-solid": "2.11.10"
+    }
+}
