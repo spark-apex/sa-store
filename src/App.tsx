@@ -1,15 +1,13 @@
 /// SA-Store 根组件
-/// AuthProvider + TitleBar + 页面切换 + 底部导航
+/// AuthProvider + TitleBar + BottomNav（含"我的"）
 import { onMount, Switch, Match, createSignal } from 'solid-js'
 import { TitleBar, windowCtl } from '@sa/ui/desktop'
-import { AuthProvider, UserAvatar, LoginDialog } from '@sa/ui/user'
-import NavBar from '@/components/NavBar'
+import { AuthProvider, BottomNav, ProfilePage, LoginDialog } from '@sa/ui/user'
 import Home from '@/pages/Home'
 import Browse from '@/pages/Browse'
 import Installed from '@/pages/Installed'
-import { currentPage } from '@/services/state'
 
-/// 星火极点品牌 Logo（应用商店用主品牌色）
+/// 星火极点品牌 Logo
 function StoreLogo() {
     return (
         <svg width="16" height="16" viewBox="0 0 64 64" fill="none">
@@ -27,17 +25,22 @@ function StoreLogo() {
                     <stop offset="100%" stop-color="#6FB5E8" />
                 </linearGradient>
             </defs>
-            {/* 底层 — 最浅 */}
             <path d="M8 38 L32 26 L56 38 L32 50 Z" fill="url(#sl1)" />
-            {/* 中层 */}
             <path d="M8 30 L32 18 L56 30 L32 42 Z" fill="url(#sl2)" />
-            {/* 顶层 — 最深 */}
             <path d="M8 22 L32 10 L56 22 L32 34 Z" fill="url(#sl3)" />
         </svg>
     )
 }
 
+/// SA-Store 业务 Tab
+const STORE_TABS = [
+    { key: 'home', label: '推荐', icon: 'i-carbon-home' },
+    { key: 'browse', label: '浏览', icon: 'i-carbon-search' },
+    { key: 'installed', label: '已安装', icon: 'i-carbon-download' },
+]
+
 export default function App() {
+    const [page, setPage] = createSignal('home')
     const [showLogin, setShowLogin] = createSignal(false)
 
     onMount(() => {
@@ -58,31 +61,30 @@ export default function App() {
                     productLogo={<StoreLogo />}
                     appKey="sa-store"
                     productUrl="https://github.com/spark-apex/sa-store"
-                >
-                    {/* TitleBar 右侧插入用户头像 */}
-                    <UserAvatar
-                        size={28}
-                        showProducts={true}
-                        onLogin={() => setShowLogin(true)}
-                    />
-                </TitleBar>
+                />
 
                 {/* 页面内容区 */}
-                <main class="flex-1 overflow-y-auto overflow-x-hidden z-10 pb-16"
+                <main class="flex-1 overflow-y-auto overflow-x-hidden z-10 pb-14"
                     style={{ background: 'var(--bg-deepest)' }}>
                     <Switch>
-                        <Match when={currentPage() === 'home'}><Home /></Match>
-                        <Match when={currentPage() === 'browse'}><Browse /></Match>
-                        <Match when={currentPage() === 'installed'}><Installed /></Match>
+                        <Match when={page() === 'home'}><Home /></Match>
+                        <Match when={page() === 'browse'}><Browse /></Match>
+                        <Match when={page() === 'installed'}><Installed /></Match>
+                        <Match when={page() === '__profile__'}><ProfilePage /></Match>
                     </Switch>
                 </main>
 
-                <NavBar />
+                {/* 统一底部导航 */}
+                <BottomNav
+                    tabs={STORE_TABS}
+                    current={page}
+                    onChange={setPage}
+                    onLogin={() => setShowLogin(true)}
+                />
             </div>
 
-            {/* 登录弹窗 */}
+            {/* 弹窗式登录（业务操作中触发） */}
             <LoginDialog open={showLogin()} onClose={() => setShowLogin(false)} />
         </AuthProvider>
     )
 }
-
