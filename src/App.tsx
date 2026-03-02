@@ -3,9 +3,10 @@
 import { onMount, Switch, Match, createSignal } from 'solid-js'
 import { TitleBar, windowCtl, createI18n } from '@sa/ui/desktop'
 import { AuthProvider, BottomNav, ProfilePage, LoginDialog } from '@sa/ui/user'
+import { translations } from '@/i18n'
 
-/// i18n（暂无翻译文件，默认中文）
-const i18n = createI18n('sa-store')
+/// i18n（传入翻译表，切换语言后 UI 文本跟着变）
+const i18n = createI18n('sa-store', translations)
 import Home from '@/pages/Home'
 import Browse from '@/pages/Browse'
 import Installed from '@/pages/Installed'

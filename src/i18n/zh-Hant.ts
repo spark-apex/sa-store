@@ -1,0 +1,25 @@
+/// SA-Store 中文繁體
+const zhHant: Record<string, string> = {
+    'nav.home': '推薦',
+    'nav.browse': '瀏覽',
+    'nav.installed': '已安裝',
+    'nav.profile': '我的',
+    'home.banner.title': '星火極點應用商店',
+    'home.banner.desc': '發現優質應用，一鍵安裝更新',
+    'home.section.official': '官方應用',
+    'home.section.viewAll': '查看全部',
+    'home.btn.get': '取得',
+    'home.btn.open': '開啟',
+    'home.btn.update': '更新',
+    'browse.title': '瀏覽',
+    'browse.search': '搜尋應用...',
+    'browse.category': '分類',
+    'browse.all': '全部',
+    'installed.title': '已安裝',
+    'installed.empty': '暫無已安裝應用',
+    'common.loading': '載入中...',
+    'common.retry': '重試',
+    'common.cancel': '取消',
+    'common.confirm': '確定',
+}
+export default zhHant
