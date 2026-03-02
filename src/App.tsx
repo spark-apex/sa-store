@@ -1,7 +1,8 @@
 /// SA-Store 根组件
-/// TitleBar + 页面切换 + 底部导航
-import { onMount, Switch, Match } from 'solid-js'
+/// AuthProvider + TitleBar + 页面切换 + 底部导航
+import { onMount, Switch, Match, createSignal } from 'solid-js'
 import { TitleBar, windowCtl } from '@sa/ui/desktop'
+import { AuthProvider, UserAvatar, LoginDialog } from '@sa/ui/user'
 import NavBar from '@/components/NavBar'
 import Home from '@/pages/Home'
 import Browse from '@/pages/Browse'
@@ -37,6 +38,8 @@ function StoreLogo() {
 }
 
 export default function App() {
+    const [showLogin, setShowLogin] = createSignal(false)
+
     onMount(() => {
         windowCtl.show()
         const splash = document.getElementById('splash')
@@ -47,26 +50,39 @@ export default function App() {
     })
 
     return (
-        <div class="h-full w-full flex flex-col overflow-hidden">
-            <TitleBar
-                productName="Store"
-                productVersion="1.0.0"
-                productLogo={<StoreLogo />}
-                appKey="sa-store"
-                productUrl="https://github.com/spark-apex/sa-store"
-            />
+        <AuthProvider appKey="sa-store">
+            <div class="h-full w-full flex flex-col overflow-hidden">
+                <TitleBar
+                    productName="Store"
+                    productVersion="1.0.0"
+                    productLogo={<StoreLogo />}
+                    appKey="sa-store"
+                    productUrl="https://github.com/spark-apex/sa-store"
+                >
+                    {/* TitleBar 右侧插入用户头像 */}
+                    <UserAvatar
+                        size={28}
+                        showProducts={true}
+                        onLogin={() => setShowLogin(true)}
+                    />
+                </TitleBar>
 
-            {/* 页面内容区 */}
-            <main class="flex-1 overflow-y-auto overflow-x-hidden z-10 pb-16"
-                style={{ background: 'var(--bg-deepest)' }}>
-                <Switch>
-                    <Match when={currentPage() === 'home'}><Home /></Match>
-                    <Match when={currentPage() === 'browse'}><Browse /></Match>
-                    <Match when={currentPage() === 'installed'}><Installed /></Match>
-                </Switch>
-            </main>
+                {/* 页面内容区 */}
+                <main class="flex-1 overflow-y-auto overflow-x-hidden z-10 pb-16"
+                    style={{ background: 'var(--bg-deepest)' }}>
+                    <Switch>
+                        <Match when={currentPage() === 'home'}><Home /></Match>
+                        <Match when={currentPage() === 'browse'}><Browse /></Match>
+                        <Match when={currentPage() === 'installed'}><Installed /></Match>
+                    </Switch>
+                </main>
 
-            <NavBar />
-        </div>
+                <NavBar />
+            </div>
+
+            {/* 登录弹窗 */}
+            <LoginDialog open={showLogin()} onClose={() => setShowLogin(false)} />
+        </AuthProvider>
     )
 }
+
