@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import solid from 'vite-plugin-solid'
 import UnoCSS from 'unocss/vite'
+import killPort from '@sa/vite-plugin-kill-port'
 import { resolve } from 'path'
 
 /// 共享包路径
@@ -8,6 +9,7 @@ const saUiPath = resolve(__dirname, '../packages/sa-ui')
 
 export default defineConfig(({ mode }) => ({
     plugins: [
+        killPort(),
         solid(),
         UnoCSS({ inspector: mode === 'development' }),
     ],
@@ -21,7 +23,7 @@ export default defineConfig(({ mode }) => ({
     },
     clearScreen: false,
     server: {
-        port: 5180,
+        port: 51003,
         strictPort: true,
     },
     envPrefix: ['VITE_', 'TAURI_'],

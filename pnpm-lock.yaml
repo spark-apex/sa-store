@@ -24,6 +24,9 @@ importers:
       '@iconify-json/carbon':
         specifier: 1.2.18
         version: 1.2.18
+      '@sa/vite-plugin-kill-port':
+        specifier: file:../packages/vite-plugin-kill-port
+        version: file:../packages/vite-plugin-kill-port
       '@tauri-apps/cli':
         specifier: 2.3.0
         version: 2.3.0
@@ -442,6 +445,9 @@ packages:
 
   '@sa/ui@file:../packages/sa-ui':
     resolution: {directory: ../packages/sa-ui, type: directory}
+
+  '@sa/vite-plugin-kill-port@file:../packages/vite-plugin-kill-port':
+    resolution: {directory: ../packages/vite-plugin-kill-port, type: directory}
 
   '@tauri-apps/api@2.3.0':
     resolution: {integrity: sha512-33Z+0lX2wgZbx1SPFfqvzI6su63hCBkbzv+5NexeYjIx7WA9htdOKoRR7Dh3dJyltqS5/J8vQFyybiRoaL0hlA==}
@@ -1387,6 +1393,8 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.3.0
       solid-js: 1.10.0-beta.0
+
+  '@sa/vite-plugin-kill-port@file:../packages/vite-plugin-kill-port': {}
 
   '@tauri-apps/api@2.3.0': {}
 
