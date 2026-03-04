@@ -14,7 +14,7 @@ services:
       POSTGRES_USER: sa_store
       POSTGRES_PASSWORD: ${DB_PASSWORD:-sa_store_dev}
     ports:
-      - "5437:5432"
+      - "53003:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
